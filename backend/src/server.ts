@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectToDB } from "./config/db.js";
 import authRouter from "./routes/auth.route.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use("/ping", (req: Request, res: Response) => {
   });
 });
 app.use("/api/v1/auth", authRouter);
+app.use(errorHandler);
 
 //database connection
 connectToDB()

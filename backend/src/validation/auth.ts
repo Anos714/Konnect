@@ -11,7 +11,7 @@ export const registerSchema = Joi.object({
         "Password must have at least one uppercase, one lowercase, one number, one special character, and no spaces",
     })
     .required(),
-  avatar: Joi.string().uri(),
+  avatar: Joi.string().uri().allow(""),
   bio: Joi.string().min(3).max(250).allow(""),
   nativeLang: Joi.string().allow(""),
   learningLang: Joi.string().allow(""),

@@ -1,17 +1,7 @@
-import mongoose, { Document, Types, type ObjectId } from "mongoose";
-
-interface IUser extends Document {
-  fullName: string;
-  email: string;
-  password: string;
-  avatar: string;
-  bio?: string;
-  nativeLang?: string;
-  learningLang?: string;
-  location?: string;
-  isOnboarded: boolean;
-  friends: Types.ObjectId[];
-}
+import bcrypt from "bcryptjs";
+import type { NextFunction } from "express";
+import mongoose, { Document, Types } from "mongoose";
+import type { IUser } from "../types/user.js";
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
@@ -32,12 +22,10 @@ const UserSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       required: [true, "Password is required"],
-      select: false,
     },
     avatar: {
       type: String,
-      default:
-        "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png",
+      default: "",
     },
     bio: {
       type: String,
@@ -68,5 +56,16 @@ const UserSchema = new mongoose.Schema<IUser>(
   },
   { timestamps: true },
 );
+
+//pre hooks
+UserSchema.pre<IUser>("save", async function () {
+  if (!this.isModified("password")) return;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw error;
+  }
+});
 
 export const UserModel = mongoose.model<IUser>("User", UserSchema);
