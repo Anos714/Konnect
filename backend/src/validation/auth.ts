@@ -6,14 +6,18 @@ export const registerSchema = Joi.object({
   password: Joi.string()
     .min(8)
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=])[^\s]+$/)
+    .messages({
+      "string.pattern.base":
+        "Password must have at least one uppercase, one lowercase, one number, one special character, and no spaces",
+    })
     .required(),
-  avatar: Joi.string(),
-  bio: Joi.string().min(3).max(250),
-  nativeLang: Joi.string(),
-  learningLang: Joi.string(),
-  location: Joi.string(),
-  isOnboarded: Joi.boolean(),
-  friends: Joi.string(),
+  avatar: Joi.string().uri(),
+  bio: Joi.string().min(3).max(250).allow(""),
+  nativeLang: Joi.string().allow(""),
+  learningLang: Joi.string().allow(""),
+  location: Joi.string().allow(""),
+  isOnboarded: Joi.boolean().default(false),
+  friends: Joi.array().items(Joi.string().hex().length(24)).default([]),
 });
 
 export const loginSchema = Joi.object({
