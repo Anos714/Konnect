@@ -1,18 +1,31 @@
 import type { Request, Response, NextFunction } from "express";
-
+import { AppError } from "../utils/AppError.js";
 export const errorHandler = (
-  err: any,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  let statusCode = 500;
+  let message = "Internal Server Error";
+
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  }
+
   console.error(err);
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Something went wrong";
+  if (process.env.NODE_ENV === "production") {
+    return res.status(statusCode).json({
+      success: false,
+      msg: message,
+    });
+  }
 
   res.status(statusCode).json({
     success: false,
     msg: message,
+    stack: err.stack,
   });
 };

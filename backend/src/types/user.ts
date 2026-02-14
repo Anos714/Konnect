@@ -10,4 +10,5 @@ export interface IUser extends Document {
   location?: string;
   isOnboarded: boolean;
   friends: Types.ObjectId[];
+  matchPassword(password: string): Promise<boolean>;
 }

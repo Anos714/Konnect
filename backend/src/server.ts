@@ -31,7 +31,6 @@ app.use("/ping", (req: Request, res: Response) => {
 });
 app.use("/api/v1/auth", authRouter);
 app.use(errorHandler);
-
 //database connection
 connectToDB()
   .then(() => {

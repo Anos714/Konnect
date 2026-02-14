@@ -1,29 +1,30 @@
 import type { NextFunction, Request, Response } from "express";
 import { loginSchema, registerSchema } from "../validation/auth.js";
 import { UserModel } from "../models/User.model.js";
-import type { loginRequest, loginResponse } from "../types/auth.js";
+import type {
+  loginRequest,
+  loginResponse,
+  registerRequest,
+  registerResponse,
+} from "../types/auth.js";
 import { genrateTokenAndCookies } from "../middlewares/genearteTokenAndCookie.js";
-import bcrypt from "bcryptjs";
+import { AppError } from "../utils/AppError.js";
 
 export const regsiterUser = async (
-  req: Request<{}, {}, loginRequest>,
-  res: Response<loginResponse>,
+  req: Request<{}, {}, registerRequest>,
+  res: Response<registerResponse>,
   next: NextFunction,
 ) => {
   try {
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({
-        success: false,
-        msg: error.details[0]?.message,
-      });
+      throw new AppError(`${error.details[0]?.message}`, 400);
     }
 
     const { fullName, email, password } = value;
     const user = await UserModel.findOne({ email });
     if (user) {
-      res.status(403);
-      throw new Error("User already exists");
+      throw new AppError("User already exists", 403);
     }
 
     const idx = Math.floor(Math.random() * 100) + 1;
@@ -43,29 +44,24 @@ export const regsiterUser = async (
 };
 
 export const loginUser = async (
-  req: Request,
-  res: Response,
+  req: Request<{}, {}, loginRequest>,
+  res: Response<loginResponse>,
   next: NextFunction,
 ) => {
   try {
     const { error, value } = loginSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({
-        success: false,
-        msg: error.details[0]?.message,
-      });
+      throw new AppError(`${error.details[0]?.message}`, 400);
     }
 
     const { email, password } = value;
     const user = await UserModel.findOne({ email });
     if (!user) {
-      res.status(403);
-      throw new Error("User not found");
+      throw new AppError("Invalid email or password", 401);
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.matchPassword(password);
     if (!isPasswordValid) {
-      res.status(403);
-      throw new Error("Invalid credentials");
+      throw new AppError("Invalid email or password", 401);
     }
 
     genrateTokenAndCookies(200, res, "User Logged in successfully", user);
@@ -74,12 +70,27 @@ export const loginUser = async (
   }
 };
 
-export const logoutUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
   try {
+    const cookieOptions = {
+      httpOnly: true,
+      sameSite: "strict" as "strict",
+      secure: process.env.NODE_ENV === "production",
+    };
+    res.clearCookie("accessToken", {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.clearCookie("refreshToken", {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      success: true,
+      msg: "User logged out successfully",
+    });
   } catch (error) {
     next(error);
   }
