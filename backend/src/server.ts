@@ -4,7 +4,7 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { connectToDB } from "./config/db.js";
-import { error } from "console";
+import authRouter from "./routes/auth.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -28,6 +28,7 @@ app.use("/ping", (req: Request, res: Response) => {
     msg: "pong",
   });
 });
+app.use("/api/v1/auth", authRouter);
 
 //database connection
 connectToDB()
