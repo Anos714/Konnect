@@ -18,11 +18,12 @@ export const regsiterUser = async (
   try {
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
-      throw new AppError(`${error.details[0]?.message}`, 400);
+      const message = error.details[0]?.message || "Validation failed";
+      throw new AppError(message, 400);
     }
 
     const { fullName, email, password } = value;
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).select("+password");
     if (user) {
       throw new AppError("User already exists", 403);
     }
@@ -37,7 +38,8 @@ export const regsiterUser = async (
       avatar: randomAvatar,
     });
 
-    genrateTokenAndCookies(201, res, "User registered successfully", newUser);
+    const userObj = newUser.toObject();
+    genrateTokenAndCookies(201, res, "User registered successfully", userObj);
   } catch (error) {
     next(error);
   }
@@ -50,12 +52,14 @@ export const loginUser = async (
 ) => {
   try {
     const { error, value } = loginSchema.validate(req.body);
+
     if (error) {
-      throw new AppError(`${error.details[0]?.message}`, 400);
+      const message = error.details[0]?.message || "Validation failed";
+      throw new AppError(message, 400);
     }
 
     const { email, password } = value;
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).select("+password");
     if (!user) {
       throw new AppError("Invalid email or password", 401);
     }
@@ -63,8 +67,8 @@ export const loginUser = async (
     if (!isPasswordValid) {
       throw new AppError("Invalid email or password", 401);
     }
-
-    genrateTokenAndCookies(200, res, "User Logged in successfully", user);
+    const userObj = user.toObject();
+    genrateTokenAndCookies(200, res, "User Logged in successfully", userObj);
   } catch (error) {
     next(error);
   }
