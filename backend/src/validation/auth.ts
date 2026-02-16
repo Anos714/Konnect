@@ -11,13 +11,6 @@ export const registerSchema = Joi.object({
         "Password must have at least one uppercase, one lowercase, one number, one special character, and no spaces",
     })
     .required(),
-  avatar: Joi.string().uri().allow(""),
-  bio: Joi.string().min(3).max(250).allow(""),
-  nativeLang: Joi.string().allow(""),
-  learningLang: Joi.string().allow(""),
-  location: Joi.string().allow(""),
-  isOnboarded: Joi.boolean().default(false),
-  friends: Joi.array().items(Joi.string().hex().length(24)).default([]),
 });
 
 export const loginSchema = Joi.object({
@@ -26,4 +19,13 @@ export const loginSchema = Joi.object({
     .min(8)
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=])[^\s]+$/)
     .required(),
+});
+
+export const onboardSchema = Joi.object({
+  fullName: Joi.string().min(3).max(30).optional(),
+  avatar: Joi.string().uri().allow("").optional(),
+  bio: Joi.string().min(3).max(250).allow("").optional(),
+  nativeLang: Joi.string().trim().min(1).required(),
+  learningLang: Joi.string().trim().min(1).required(),
+  location: Joi.string().trim().min(1).required(),
 });

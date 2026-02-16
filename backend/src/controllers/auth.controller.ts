@@ -1,5 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-import { loginSchema, registerSchema } from "../validation/auth.js";
+import {
+  loginSchema,
+  onboardSchema,
+  registerSchema,
+} from "../validation/auth.js";
 import { UserModel } from "../models/User.model.js";
 import type {
   loginRequest,
@@ -9,6 +13,7 @@ import type {
 } from "../types/auth.js";
 import { genrateTokenAndCookies } from "../middlewares/genearteTokenAndCookie.js";
 import { AppError } from "../utils/AppError.js";
+import { upsertStreamUser } from "../config/stream.js";
 
 export const regsiterUser = async (
   req: Request<{}, {}, registerRequest>,
@@ -37,6 +42,20 @@ export const regsiterUser = async (
       password,
       avatar: randomAvatar,
     });
+
+    //stream client start
+    try {
+      await upsertStreamUser({
+        id: newUser._id.toString(),
+        name: newUser.fullName,
+        image: newUser.avatar,
+      });
+      console.log(`Stream user created for ${newUser._id}`);
+    } catch (error) {
+      console.error("Error creating stream user", error);
+    }
+
+    //stream client end
 
     const userObj = newUser.toObject();
     genrateTokenAndCookies(201, res, "User registered successfully", userObj);
@@ -94,6 +113,58 @@ export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json({
       success: true,
       msg: "User logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const onboard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user?._id;
+    const { error, value } = onboardSchema.validate(req.body, {
+      presence: "required",
+    });
+
+    if (error) {
+      const message = error.details[0]?.message || "Validation failed";
+      throw new AppError(message, 400);
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        ...value,
+        isOnboarded: true,
+      },
+      { returnDocument: "after" },
+    );
+
+    if (!updatedUser) {
+      throw new AppError("User not found", 404);
+    }
+
+    //stream client user updation start
+    try {
+      await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name: updatedUser.fullName,
+        image: updatedUser.avatar,
+      });
+      console.log("stream user updated at onboarding", updatedUser.fullName);
+    } catch (error) {
+      console.error("Error updating Stream user during onboarding", error);
+    }
+
+    //stream client user updation end
+
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
     });
   } catch (error) {
     next(error);
