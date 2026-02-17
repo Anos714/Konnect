@@ -12,3 +12,9 @@ export interface IUser extends Document {
   friends: Types.ObjectId[];
   matchPassword(password: string): Promise<boolean>;
 }
+
+export interface IFriend {
+  sender: Types.ObjectId;
+  receiver: Types.ObjectId;
+  status: "pending" | "accepted";
+}

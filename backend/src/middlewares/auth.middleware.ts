@@ -8,34 +8,38 @@ export const protectRoute = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { accessToken } = req.cookies;
-  if (!accessToken) {
-    throw new AppError("Unauthorized access, Access token is missing", 401);
+  try {
+    const { accessToken } = req.cookies;
+    if (!accessToken) {
+      return next(new AppError("Unauthorized: Access token missing", 401));
+    }
+
+    if (!process.env.JWT_SECRET_ACCESS) {
+      return next(new AppError("JWT secret env variable missing", 500));
+    }
+
+    interface JwtPayloadWithId extends jwt.JwtPayload {
+      _id: string;
+    }
+
+    let decoded: JwtPayloadWithId;
+    try {
+      decoded = jwt.verify(
+        accessToken,
+        process.env.JWT_SECRET_ACCESS,
+      ) as JwtPayloadWithId;
+    } catch (err) {
+      return next(new AppError("Unauthorized: Invalid token", 401));
+    }
+
+    const user = await UserModel.findById(decoded._id);
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    next(err);
   }
-
-  if (!process.env.JWT_SECRET_ACCESS) {
-    throw new AppError("Access secret env varibale is missing", 404);
-  }
-
-  interface JwtPayloadWithId extends jwt.JwtPayload {
-    _id: string;
-  }
-
-  const decoded = jwt.verify(
-    accessToken,
-    process.env.JWT_SECRET_ACCESS,
-  ) as JwtPayloadWithId;
-
-  if (!decoded) {
-    throw new AppError("Unauthorized access, Inavlid token", 401);
-  }
-
-  const user = await UserModel.findById(decoded._id);
-  if (!user) {
-    throw new AppError("User not found", 404);
-  }
-
-  req.user = user;
-
-  next();
 };

@@ -170,3 +170,14 @@ export const onboard = async (
     next(error);
   }
 };
+
+export const userStatus = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      user: req.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
