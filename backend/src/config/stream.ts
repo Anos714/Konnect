@@ -1,5 +1,6 @@
 import { StreamChat, type User } from "stream-chat";
 import { AppError } from "../utils/AppError.js";
+import type { Types } from "mongoose";
 
 const apiKey = process.env.STREAM_API_KEY;
 const apiSecret = process.env.STREAM_API_SECRET;
@@ -18,4 +19,11 @@ export const upsertStreamUser = async (userData: User) => {
   }
 };
 
-export const generateStreamToken = (userId: string) => {};
+export const generateStreamToken = (userId: Types.ObjectId) => {
+  try {
+    const userIdStr = userId.toString();
+    return streamClient.createToken(userIdStr);
+  } catch (error) {
+    console.error("Error generating stream token", error);
+  }
+};

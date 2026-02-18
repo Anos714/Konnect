@@ -7,6 +7,7 @@ import { connectToDB } from "./config/db.js";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import chatRouter from "./routes/chat.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -32,6 +33,7 @@ app.use("/ping", (req: Request, res: Response) => {
 });
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chat", chatRouter);
 app.use(errorHandler);
 //database connection
 connectToDB()
