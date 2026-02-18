@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import {
   loginSchema,
   onboardSchema,
@@ -14,6 +14,7 @@ import type {
 import { genrateTokenAndCookies } from "../middlewares/genearteTokenAndCookie.js";
 import { AppError } from "../utils/AppError.js";
 import { upsertStreamUser } from "../config/stream.js";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export const regsiterUser = async (
   req: Request<{}, {}, registerRequest>,
@@ -177,6 +178,49 @@ export const userStatus = (req: Request, res: Response, next: NextFunction) => {
       success: true,
       user: req.user,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refreshAccessToken: RequestHandler = async (req, res, next) => {
+  try {
+    const token = req.cookies.refreshToken;
+    if (!token) {
+      throw new AppError("No refresh token", 401);
+    }
+
+    interface JwtPayloadWithId extends jwt.JwtPayload {
+      _id: string;
+    }
+    const decoded: JwtPayloadWithId = jwt.verify(
+      token,
+      process.env.JWT_SECRET_REFRESH!,
+    ) as JwtPayloadWithId;
+
+    const user = await UserModel.findById(decoded._id);
+    if (!user) {
+      throw new AppError("User not found", 401);
+    }
+
+    const newAccessToken = jwt.sign(
+      {
+        _id: decoded._id,
+      },
+      process.env.JWT_SECRET_ACCESS!,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return res.status(200).json({ message: "Access token refreshed" });
   } catch (error) {
     next(error);
   }
