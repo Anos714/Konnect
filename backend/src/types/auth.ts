@@ -7,7 +7,7 @@ export interface registerRequest {
 export interface registerResponse {
   success: boolean;
   msg: string | undefined;
-  user?: object;
+  user?: unknown;
 }
 
 export interface loginRequest {
@@ -18,5 +18,5 @@ export interface loginRequest {
 export interface loginResponse {
   success: boolean;
   msg: string | undefined;
-  user?: object;
+  user?: unknown;
 }

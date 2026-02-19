@@ -220,7 +220,9 @@ export const refreshAccessToken: RequestHandler = async (req, res, next) => {
       maxAge: 15 * 60 * 1000,
     });
 
-    return res.status(200).json({ message: "Access token refreshed" });
+    return res
+      .status(200)
+      .json({ success: true, msg: "Access token refreshed" });
   } catch (error) {
     next(error);
   }

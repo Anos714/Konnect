@@ -1,9 +1,12 @@
-import React from 'react'
+import { useState } from "react";
 
 const Register = () => {
-  return (
-    <div>Register</div>
-  )
-}
+  const [registerData, setRegisterData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+  return <div>Register</div>;
+};
 
-export default Register
+export default Register;
