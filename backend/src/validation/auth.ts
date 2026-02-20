@@ -22,7 +22,7 @@ export const loginSchema = Joi.object({
 });
 
 export const onboardSchema = Joi.object({
-  fullName: Joi.string().min(3).max(30).optional(),
+  fullName: Joi.string().min(3).max(30).empty("").optional(),
   avatar: Joi.string().uri().allow("").optional(),
   bio: Joi.string().min(3).max(250).allow("").optional(),
   nativeLang: Joi.string().trim().min(1).required(),

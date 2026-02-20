@@ -32,5 +32,37 @@ export const loginSchema = z.object({
     ),
 });
 
+export const onBoardingSchema = z
+  .object({
+    fullName: z
+      .string()
+      .trim()
+      .min(1, { message: "Full name is required" })
+      .or(z.literal(""))
+      .optional(),
+    bio: z
+      .string()
+      .trim()
+      .min(3, { message: "Bio must be atleast 3 characters long" })
+      .max(250, { message: "Bio must not exceeds 250 charcters" })
+      .or(z.literal(""))
+      .optional(),
+    nativeLang: z
+      .string()
+      .trim()
+      .min(1, { message: "Native Language is Required" }),
+    learningLang: z
+      .string()
+      .trim()
+      .min(1, { message: "Learning Language is Required" }),
+    location: z.string().trim().min(1, { message: "Location is Required" }),
+  })
+  .refine((data) => data.nativeLang !== data.learningLang, {
+    message:
+      "Your learning language must be different from your native language",
+    path: ["learningLang"],
+  });
+
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
+export type OnBoardingData = z.infer<typeof onBoardingSchema>;

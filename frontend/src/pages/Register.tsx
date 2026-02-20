@@ -7,9 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { RegisterResponse, RegsiterRequest } from "../types";
-import { api } from "../lib/axios";
 import toast from "react-hot-toast";
+import { userRegister } from "../lib/api";
 
 const Register = () => {
   const {
@@ -25,10 +24,7 @@ const Register = () => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async (data: RegsiterRequest): Promise<RegisterResponse> => {
-      const res = await api.post("/auth/register", data);
-      return res.data;
-    },
+    mutationFn: userRegister,
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
@@ -36,12 +32,12 @@ const Register = () => {
       navigate("/onboarding");
     },
     onError: (error: any) => {
-      const message = error.res?.data?.msg || "Registeration failed";
+      const message = error.response?.data?.msg || "Registeration failed";
       toast.error(message);
     },
   });
 
-  const onSubmit = (data: RegsiterRequest) => {
+  const hanldeRegisterForm = (data: RegisterFormData) => {
     mutate(data);
   };
 
@@ -63,7 +59,7 @@ const Register = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(hanldeRegisterForm)} className="space-y-5">
           {/* Full Name */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-300">

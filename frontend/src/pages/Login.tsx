@@ -3,10 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { type LoginFormData, loginSchema } from "../validation/authSchema";
 import { useNavigate } from "react-router";
-import type { LoginRequest, LoginResponse } from "../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "../lib/axios";
 import toast from "react-hot-toast";
+import { userLogin } from "../lib/api";
 
 const Login = () => {
   const {
@@ -22,10 +21,7 @@ const Login = () => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async (data: LoginRequest): Promise<LoginResponse> => {
-      const res = await api.post("/auth/login", data);
-      return res.data;
-    },
+    mutationFn: userLogin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
       toast.success("Login successful 🚀");
@@ -33,12 +29,12 @@ const Login = () => {
     },
 
     onError: (error: any) => {
-      const message = error.res?.data?.msg || "Login failed";
+      const message = error.response?.data?.msg || "Login failed";
       toast.error(message);
     },
   });
 
-  const hanldeLoginForm = (data: LoginRequest) => {
+  const hanldeLoginForm = (data: LoginFormData) => {
     mutate(data);
   };
 

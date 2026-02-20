@@ -11,13 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "./lib/axios";
 import NotFound from "./pages/NotFound";
 import Loader from "./components/loader/Loader";
+import { useState } from "react";
 
 const App = () => {
-  const {
-    data: authData,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: authData, isLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       const res = await api.get("/auth/me");
@@ -28,7 +25,6 @@ const App = () => {
   const authUser = authData?.user;
 
   if (isLoading) return <Loader />;
-  if (error) return <h1>{error.message}</h1>;
 
   return (
     <div>
