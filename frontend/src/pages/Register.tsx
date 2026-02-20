@@ -6,6 +6,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { RegisterResponse, RegsiterRequest } from "../types";
+import { api } from "../lib/axios";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const {
@@ -18,9 +22,27 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log(data);
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: async (data: RegsiterRequest): Promise<RegisterResponse> => {
+      const res = await api.post("/auth/register", data);
+      return res.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Registeration successful 🚀");
+      navigate("/onboarding");
+    },
+    onError: (error: any) => {
+      const message = error.res?.data?.msg || "Registeration failed";
+      toast.error(message);
+    },
+  });
+
+  const onSubmit = (data: RegsiterRequest) => {
+    mutate(data);
   };
 
   return (
@@ -116,9 +138,10 @@ const Register = () => {
 
           <button
             type="submit"
+            disabled={isPending}
             className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-3 rounded-full transition-colors mt-4"
           >
-            Create Account
+            {isPending ? "Creating account..." : "Create Account"}
           </button>
 
           <p className="text-center text-sm text-gray-400 mt-4">

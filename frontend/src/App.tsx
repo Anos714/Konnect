@@ -10,6 +10,7 @@ import CallPage from "./pages/CallPage";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "./lib/axios";
 import NotFound from "./pages/NotFound";
+import Loader from "./components/loader/Loader";
 
 const App = () => {
   const {
@@ -25,6 +26,9 @@ const App = () => {
     retry: false,
   });
   const authUser = authData?.user;
+
+  if (isLoading) return <Loader />;
+  if (error) return <h1>{error.message}</h1>;
 
   return (
     <div>

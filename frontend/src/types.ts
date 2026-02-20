@@ -13,8 +13,18 @@ export type LoginResponse = {
   };
 };
 
-export type regsiterRequest = {
+export type RegsiterRequest = {
   fullName: string;
   email: string;
   password: string;
+};
+
+export type RegisterResponse = {
+  success: boolean;
+  msg: string;
+  user: {
+    fullName: string;
+    email: string;
+    avatar: string;
+  };
 };
