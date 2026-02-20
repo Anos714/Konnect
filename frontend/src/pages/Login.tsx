@@ -3,6 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { type LoginFormData, loginSchema } from "../validation/authSchema";
 import { useNavigate } from "react-router";
+import type { LoginRequest, LoginResponse } from "../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../lib/axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const {
@@ -15,9 +19,27 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const onSubmit = (data: any) => {
-    console.log("Logging in with:", data);
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: async (data: LoginRequest): Promise<LoginResponse> => {
+      const res = await api.post("/auth/login", data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Login successful 🚀");
+      navigate("/");
+    },
+
+    onError: (error: any) => {
+      const message = error.res?.data?.msg || "Login failed";
+      toast.error(message);
+    },
+  });
+
+  const hanldeLoginForm = (data: LoginRequest) => {
+    mutate(data);
   };
 
   return (
@@ -38,7 +60,7 @@ const Login = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(hanldeLoginForm)} className="space-y-6">
           {/* Email */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-300">
@@ -51,7 +73,9 @@ const Login = () => {
               className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
             />
             {errors.email && (
-              <span className="text-red-500 text-xs">Email is required</span>
+              <span className="text-red-500 text-xs">
+                {errors.email.message}
+              </span>
             )}
           </div>
 
@@ -72,21 +96,26 @@ const Login = () => {
               className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
             />
             {errors.password && (
-              <span className="text-red-500 text-xs">Password is required</span>
+              <span className="text-red-500 text-xs">
+                {errors.password.message}
+              </span>
             )}
           </div>
 
           <button
             type="submit"
+            disabled={isPending}
             className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-3 rounded-full transition-colors mt-2"
-            onClick={() => navigate("/register")}
           >
-            Sign In
+            {isPending ? "Signing In..." : "Sign In"}
           </button>
 
           <p className="text-center text-sm text-gray-400">
             Don't have an account?{" "}
-            <span className="text-[#22c55e] cursor-pointer font-medium hover:underline">
+            <span
+              className="text-[#22c55e] cursor-pointer font-medium hover:underline"
+              onClick={() => navigate("/register")}
+            >
               Create Account
             </span>
           </p>
