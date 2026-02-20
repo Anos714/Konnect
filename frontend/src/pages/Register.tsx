@@ -37,7 +37,7 @@ const Register = () => {
 
           <h1 className="text-2xl font-semibold mb-1">Create an Account</h1>
           <p className="text-gray-400 text-sm">
-            Join LangConnect and start your language learning journey
+            Join Konnect and start your language learning journey
           </p>
         </div>
 
@@ -87,9 +87,7 @@ const Register = () => {
               {...register("password")}
               className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
             />
-            <p className="text-gray-500 text-[11px]">
-              Password must be at least 6 characters long
-            </p>
+
             {errors.password && (
               <span className="text-red-500 text-xs">
                 {errors.password.message}
