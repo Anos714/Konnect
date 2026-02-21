@@ -7,22 +7,12 @@ import Register from "./pages/Register";
 import Notification from "./pages/Notification";
 import Chat from "./pages/Chat";
 import CallPage from "./pages/CallPage";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "./lib/axios";
 import NotFound from "./pages/NotFound";
 import Loader from "./components/loader/Loader";
-import { useState } from "react";
+import useAuthUser from "./hooks/useAuthUser";
 
 const App = () => {
-  const { data: authData, isLoading } = useQuery({
-    queryKey: ["authUser"],
-    queryFn: async () => {
-      const res = await api.get("/auth/me");
-      return res.data;
-    },
-    retry: false,
-  });
-  const authUser = authData?.user;
+  const { isLoading, authUser } = useAuthUser();
 
   if (isLoading) return <Loader />;
 

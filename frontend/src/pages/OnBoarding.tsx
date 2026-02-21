@@ -7,10 +7,11 @@ import {
 } from "../validation/authSchema";
 import type { OnBoardRequest } from "../types";
 import { useNavigate } from "react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { userOnBoarding } from "../lib/api";
 import { languages } from "../assets/assets";
+import useAuthUser from "../hooks/useAuthUser";
 
 const OnBoarding = () => {
   const {
@@ -40,8 +41,8 @@ const OnBoarding = () => {
     OnBoardMutation(data);
   };
 
-  const { data: userData } = useQuery({ queryKey: ["authUser"] });
-  const user = userData?.user;
+  //custom hook for geeting current user's info
+  const { authUser } = useAuthUser();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 sm:p-8 font-sans">
@@ -74,7 +75,7 @@ const OnBoarding = () => {
             </label>
             <input
               type="text"
-              value={user?.fullName || ""}
+              value={authUser?.fullName || ""}
               placeholder="Jhon Doe"
               {...register("fullName")}
               className="bg-[#111111] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 text-white outline-none focus:border-[#22c55e] transition-all"

@@ -1,4 +1,5 @@
 import type {
+  AuthUserResponse,
   LoginRequest,
   LoginResponse,
   OnBoardRequest,
@@ -24,5 +25,10 @@ export const userOnBoarding = async (
   data: OnBoardRequest,
 ): Promise<OnBoardResponse> => {
   const res = await api.post("/auth/onboarding", data);
+  return res.data;
+};
+
+export const getAuthUser = async (): Promise<AuthUserResponse> => {
+  const res = await api.get("/auth/me");
   return res.data;
 };
