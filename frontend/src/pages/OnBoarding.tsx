@@ -11,7 +11,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { userOnBoarding } from "../lib/api";
 import { languages } from "../assets/assets";
-import { api } from "../lib/axios";
 
 const OnBoarding = () => {
   const {
@@ -25,7 +24,7 @@ const OnBoarding = () => {
 
   const navigate = useNavigate();
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate: OnBoardMutation, isPending } = useMutation({
     mutationFn: userOnBoarding,
     onSuccess: () => {
       navigate("/");
@@ -38,7 +37,7 @@ const OnBoarding = () => {
   });
 
   const hanldeOnBoardForm = (data: OnBoardingData) => {
-    mutate(data);
+    OnBoardMutation(data);
   };
 
   const { data: userData } = useQuery({ queryKey: ["authUser"] });
@@ -174,7 +173,14 @@ const OnBoarding = () => {
             className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-4 rounded-full flex items-center justify-center gap-2 mt-4 transition-all shadow-lg shadow-[#22c55e]/10"
           >
             <Globe className="w-5 h-5" />
-            {isPending ? "Onboarding..." : "Complete Onboarding"}
+            {isPending ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner loading-xs"></span>
+                <span>Onboarding...</span>
+              </div>
+            ) : (
+              "Complete Onboarding"
+            )}
           </button>
         </form>
       </div>

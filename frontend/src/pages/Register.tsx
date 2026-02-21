@@ -23,7 +23,7 @@ const Register = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate: RegisterMutation, isPending } = useMutation({
     mutationFn: userRegister,
 
     onSuccess: () => {
@@ -38,7 +38,7 @@ const Register = () => {
   });
 
   const hanldeRegisterForm = (data: RegisterFormData) => {
-    mutate(data);
+    RegisterMutation(data);
   };
 
   return (
@@ -137,7 +137,14 @@ const Register = () => {
             disabled={isPending}
             className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-3 rounded-full transition-colors mt-4"
           >
-            {isPending ? "Creating account..." : "Create Account"}
+            {isPending ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner loading-xs"></span>
+                <span>Creating account...</span>
+              </div>
+            ) : (
+              "Create Account"
+            )}
           </button>
 
           <p className="text-center text-sm text-gray-400 mt-4">

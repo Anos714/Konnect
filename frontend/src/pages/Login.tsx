@@ -12,6 +12,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -20,7 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate: LoginMutation, isPending } = useMutation({
     mutationFn: userLogin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
@@ -35,7 +36,8 @@ const Login = () => {
   });
 
   const hanldeLoginForm = (data: LoginFormData) => {
-    mutate(data);
+    LoginMutation(data);
+    reset();
   };
 
   return (
@@ -103,7 +105,14 @@ const Login = () => {
             disabled={isPending}
             className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-3 rounded-full transition-colors mt-2"
           >
-            {isPending ? "Signing In..." : "Sign In"}
+            {isPending ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner loading-xs"></span>
+                <span>Signing In...</span>
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </button>
 
           <p className="text-center text-sm text-gray-400">

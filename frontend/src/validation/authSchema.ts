@@ -19,6 +19,7 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
   email: z
+
     .email({ message: "Invalid email format" })
     .min(1, { message: "Email is required" })
     .trim(),
