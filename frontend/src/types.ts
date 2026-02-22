@@ -32,6 +32,7 @@ export type RegisterResponse = {
 export type OnBoardRequest = {
   fullName?: string;
   bio?: string;
+  avatar?: string;
   nativeLang: string;
   learningLang: string;
   location: string;

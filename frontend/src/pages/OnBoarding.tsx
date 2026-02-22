@@ -6,42 +6,29 @@ import {
   type OnBoardingData,
 } from "../validation/authSchema";
 import type { OnBoardRequest } from "../types";
-import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { userOnBoarding } from "../lib/api";
 import { languages } from "../assets/assets";
 import useAuthUser from "../hooks/useAuthUser";
+import { useOnBoard } from "../hooks/useOnBoard";
 
 const OnBoarding = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<OnBoardRequest>({
     resolver: zodResolver(onBoardingSchema),
     mode: "onSubmit",
   });
 
-  const navigate = useNavigate();
-
-  const { mutate: OnBoardMutation, isPending } = useMutation({
-    mutationFn: userOnBoarding,
-    onSuccess: () => {
-      navigate("/");
-      toast.success("Onboarded successfully ");
-    },
-    onError: (error: any) => {
-      const message = error.response?.data?.msg || "Onboarded failed";
-      toast.error(message);
-    },
-  });
+  const { OnBoardMutation, isPending } = useOnBoard();
 
   const hanldeOnBoardForm = (data: OnBoardingData) => {
     OnBoardMutation(data);
+    reset();
   };
 
-  //custom hook for geeting current user's info
+  //custom hook for geting current user's info
   const { authUser } = useAuthUser();
 
   return (
@@ -55,7 +42,7 @@ const OnBoarding = () => {
           <div className="relative mb-6">
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#141414] bg-white">
               <img
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Beth"
+                src={authUser?.avatar}
                 alt="Avatar"
                 className="w-full h-full object-cover"
               />
@@ -113,8 +100,8 @@ const OnBoarding = () => {
               >
                 <option value="">Select your native language</option>
                 {languages.map((lang, index) => (
-                  <option key={index} value={lang}>
-                    {lang}
+                  <option key={index} value={lang.name}>
+                    {lang.name}
                   </option>
                 ))}
               </select>
@@ -135,8 +122,8 @@ const OnBoarding = () => {
               >
                 <option value="">Select language you're learning</option>
                 {languages.map((lang, index) => (
-                  <option key={index} value={lang}>
-                    {lang}
+                  <option key={index} value={lang.name}>
+                    {lang.name}
                   </option>
                 ))}
               </select>

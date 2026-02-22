@@ -35,6 +35,7 @@ export const loginSchema = z.object({
 
 export const onBoardingSchema = z
   .object({
+    avatar: z.string().trim().optional(),
     fullName: z
       .string()
       .trim()

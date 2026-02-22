@@ -2,10 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { type LoginFormData, loginSchema } from "../validation/authSchema";
+import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { userLogin } from "../lib/api";
 
 const Login = () => {
   const {
@@ -19,21 +17,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const { mutate: LoginMutation, isPending } = useMutation({
-    mutationFn: userLogin,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Login successful 🚀");
-      navigate("/");
-    },
-
-    onError: (error: any) => {
-      const message = error.response?.data?.msg || "Login failed";
-      toast.error(message);
-    },
-  });
+  const { LoginMutation, isPending } = useLogin();
 
   const hanldeLoginForm = (data: LoginFormData) => {
     LoginMutation(data);
@@ -41,7 +25,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-[#0a0a0a] text-white font-sans">
+    <div
+      className="min-h-screen w-full flex flex-col md:flex-row bg-[#0a0a0a] text-white font-sans"
+      data-theme="forest"
+    >
       {/* Left Section: Login Form */}
       <div className="w-full md:w-[45%] flex flex-col justify-center px-8 py-12 lg:px-20 bg-[#0d0d0d]">
         <div className="mb-8 text-center md:text-left">

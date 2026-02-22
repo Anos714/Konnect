@@ -14,6 +14,8 @@ import useAuthUser from "./hooks/useAuthUser";
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
 
+  const isOnboarded = authUser?.isOnboarded;
+
   if (isLoading) return <Loader />;
 
   return (
@@ -21,11 +23,27 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={authUser ? <Home /> : <Navigate to="/login" />}
+          element={
+            authUser && isOnboarded ? (
+              <Home />
+            ) : (
+              <Navigate to={authUser ? "/onboarding" : "/login"} />
+            )
+          }
         />
         <Route
           path="/onboarding"
-          element={authUser ? <OnBoarding /> : <Navigate to="/login" />}
+          element={
+            authUser ? (
+              !isOnboarded ? (
+                <OnBoarding />
+              ) : (
+                <Navigate to="/" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/login"

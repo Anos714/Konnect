@@ -6,39 +6,25 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { userRegister } from "../lib/api";
+import { useRegister } from "../hooks/useRegister";
 
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: "onSubmit",
   });
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const { mutate: RegisterMutation, isPending } = useMutation({
-    mutationFn: userRegister,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Registeration successful 🚀");
-      navigate("/onboarding");
-    },
-    onError: (error: any) => {
-      const message = error.response?.data?.msg || "Registeration failed";
-      toast.error(message);
-    },
-  });
+  const { RegisterMutation, isPending } = useRegister();
 
   const hanldeRegisterForm = (data: RegisterFormData) => {
     RegisterMutation(data);
+    reset();
   };
 
   return (
