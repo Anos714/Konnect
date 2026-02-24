@@ -2,6 +2,7 @@ import type {
   AuthUserResponse,
   LoginRequest,
   LoginResponse,
+  LogoutResponse,
   OnBoardRequest,
   OnBoardResponse,
   RegisterResponse,
@@ -21,6 +22,11 @@ export const userRegister = async (
   return res.data;
 };
 
+export const userLogout = async (): Promise<LogoutResponse> => {
+  const res = await api.post("/auth/logout");
+  return res.data;
+};
+
 export const userOnBoarding = async (
   data: OnBoardRequest,
 ): Promise<OnBoardResponse> => {
@@ -29,6 +35,14 @@ export const userOnBoarding = async (
 };
 
 export const getAuthUser = async (): Promise<AuthUserResponse> => {
-  const res = await api.get("/auth/me");
-  return res.data;
+  try {
+    const res = await api.get("/auth/me");
+    return res.data;
+  } catch (error: any) {
+    return (
+      error.response?.data || {
+        error: "An error occurred while fetching user data",
+      }
+    );
+  }
 };

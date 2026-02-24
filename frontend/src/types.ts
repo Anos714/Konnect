@@ -68,3 +68,8 @@ export type AuthUserResponse = {
     updatedAt: string;
   };
 };
+
+export type LogoutResponse = {
+  success: boolean;
+  msg: string;
+};

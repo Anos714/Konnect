@@ -1,3 +1,17 @@
+import { Home, Users, Bell, type LucideIcon } from "lucide-react";
+
+interface MenuItems {
+  name: string;
+  icon: LucideIcon;
+  path: string;
+}
+
+export const menuItems: MenuItems[] = [
+  { name: "Home", icon: Home, path: "/" },
+  { name: "Friends", icon: Users, path: "/friends" },
+  { name: "Notifications", icon: Bell, path: "/notifications" },
+];
+
 export const languages = [
   { name: "Abkhazian", code: "ab", country: "GE" },
   { name: "Afar", code: "aa", country: "ET" },

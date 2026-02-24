@@ -28,91 +28,99 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-[#0a0a0a] text-white font-sans">
-      {/* Left Section: Form */}
-      <div className="w-full md:w-[45%] flex flex-col justify-center px-8 py-12 lg:px-20 bg-[#0d0d0d]">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-base-300 text-base-content font-sans">
+      <div className="w-full md:w-[45%] flex flex-col justify-center px-8 py-12 lg:px-20 bg-base-100 shadow-xl">
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-8">
-            <Send className="text-[#22c55e] w-8 h-8" />
-            <span className="text-2xl font-bold tracking-tight text-[#22c55e]">
+            <Send className="text-primary w-8 h-8" />
+            <span className="text-2xl font-bold tracking-tight text-primary">
               Konnect
             </span>
           </div>
 
-          <h1 className="text-2xl font-semibold mb-1">Create an Account</h1>
-          <p className="text-gray-400 text-sm">
+          <h1 className="text-2xl font-bold mb-1">Create an Account</h1>
+          <p className="text-base-content/60 text-sm">
             Join Konnect and start your language learning journey
           </p>
         </div>
 
         <form onSubmit={handleSubmit(hanldeRegisterForm)} className="space-y-5">
-          {/* Full Name */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300">
-              Full Name
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Full Name</span>
             </label>
             <input
               type="text"
               placeholder="John Doe"
               {...register("fullName")}
-              className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
+              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+                errors.fullName ? "input-error" : ""
+              }`}
             />
             {errors.fullName && (
-              <span className="text-red-500 text-xs">
-                {errors.fullName.message}
-              </span>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.fullName.message}
+                </span>
+              </label>
             )}
           </div>
 
-          {/* Email */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300">Email</label>
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Email</span>
+            </label>
             <input
               type="email"
               placeholder="hello@example.com"
               {...register("email")}
-              className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
+              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+                errors.email ? "input-error" : ""
+              }`}
             />
             {errors.email && (
-              <span className="text-red-500 text-xs">
-                {errors.email.message}
-              </span>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.email.message}
+                </span>
+              </label>
             )}
           </div>
 
-          {/* Password */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300">
-              Password
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Password</span>
             </label>
             <input
               type="password"
-              placeholder="........"
+              placeholder="••••••••"
               {...register("password")}
-              className="bg-[#141414] border border-[#2a2a2a] rounded-2xl px-4 py-3 outline-none focus:border-[#22c55e] transition-all"
+              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+                errors.password ? "input-error" : ""
+              }`}
             />
-
             {errors.password && (
-              <span className="text-red-500 text-xs">
-                {errors.password.message}
-              </span>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.password.message}
+                </span>
+              </label>
             )}
           </div>
 
-          {/* Terms */}
           <div className="flex items-center gap-3 py-2">
             <input
               type="checkbox"
               id="terms"
-              className="w-4 h-4 rounded border-gray-700 bg-transparent accent-[#22c55e]"
+              className="checkbox checkbox-primary checkbox-sm"
             />
-            <label htmlFor="terms" className="text-sm text-gray-400">
+            <label htmlFor="terms" className="text-sm text-base-content/70">
               I agree to the{" "}
-              <span className="text-[#22c55e] cursor-pointer hover:underline">
+              <span className="text-primary cursor-pointer hover:underline">
                 terms of service
               </span>{" "}
               and{" "}
-              <span className="text-[#22c55e] cursor-pointer hover:underline">
+              <span className="text-primary cursor-pointer hover:underline">
                 privacy policy
               </span>
             </label>
@@ -121,7 +129,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-3 rounded-full transition-colors mt-4"
+            className="btn btn-primary btn-block rounded-full mt-4"
           >
             {isPending ? (
               <div className="flex items-center justify-center gap-2">
@@ -133,10 +141,10 @@ const Register = () => {
             )}
           </button>
 
-          <p className="text-center text-sm text-gray-400 mt-4">
+          <p className="text-center text-sm text-base-content/70 mt-4">
             Already have an account?{" "}
             <span
-              className="text-[#22c55e] cursor-pointer hover:underline"
+              className="text-primary cursor-pointer font-medium hover:underline"
               onClick={() => navigate("/login")}
             >
               Sign in
@@ -145,25 +153,24 @@ const Register = () => {
         </form>
       </div>
 
-      {/* Right Section: Visual */}
-      <div className="hidden md:flex w-[55%] bg-[#0f1a14] flex-col items-center justify-center p-12 text-center">
+      <div className="hidden md:flex w-[55%] bg-base-200 flex-col items-center justify-center p-12 text-center border-l border-base-content/5">
         <div className="relative w-full max-w-md mb-12">
           <img
             src="register.png"
-            alt="Language learning illustration"
-            className="w-full h-auto drop-shadow-2xl"
+            alt="Language learning"
+            className="w-full h-auto drop-shadow-2xl brightness-95"
           />
         </div>
 
         <div className="max-w-md space-y-4">
           <h2 className="text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight">
             The world is waiting <br />
-            <span className="text-[#22c55e]">to talk to you.</span>
+            <span className="text-primary">to talk to you.</span>
           </h2>
-          <p className="text-gray-300 text-lg font-light leading-relaxed px-4">
+          <p className="text-base-content/70 text-lg font-light leading-relaxed px-4">
             Don't just learn a language—
-            <span className="text-white font-medium">live it.</span> Join a
-            community where every conversation is a step closer to fluency.
+            <span className="text-base-content font-medium">live it.</span> Join
+            a community where every conversation is a step closer to fluency.
           </p>
         </div>
       </div>

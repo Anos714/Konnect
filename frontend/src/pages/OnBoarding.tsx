@@ -28,19 +28,16 @@ const OnBoarding = () => {
     reset();
   };
 
-  //custom hook for geting current user's info
   const { authUser } = useAuthUser();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 sm:p-8 font-sans">
-      <div className="w-full max-w-2xl bg-[#0d0d0d] rounded-[40px] p-8 md:p-12 border border-white/5 shadow-2xl">
+    <div className="min-h-screen bg-base-300 flex items-center justify-center p-4 sm:p-8 font-sans text-base-content">
+      <div className="w-full max-w-2xl bg-base-100 rounded-[40px] p-8 md:p-12 border border-base-content/5 shadow-2xl">
         <div className="flex flex-col items-center mb-10">
-          <h1 className="text-3xl font-bold text-white mb-8">
-            Complete Your Profile
-          </h1>
+          <h1 className="text-3xl font-bold mb-8">Complete Your Profile</h1>
 
           <div className="relative mb-6">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#141414] bg-white">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-base-200 bg-base-200 shadow-inner">
               <img
                 src={authUser?.avatar}
                 alt="Avatar"
@@ -49,56 +46,68 @@ const OnBoarding = () => {
             </div>
           </div>
 
-          <button className="flex items-center gap-2 bg-[#14b8a6] hover:bg-[#0d9488] text-black text-sm font-bold py-2.5 px-6 rounded-full transition-all">
+          <button className="btn btn-secondary btn-sm rounded-full gap-2">
             <Dices className="w-4 h-4" />
             Generate Random Avatar
           </button>
         </div>
 
         <form onSubmit={handleSubmit(hanldeOnBoardForm)} className="space-y-6">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300 ml-1">
-              Full Name
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Full Name</span>
             </label>
             <input
               type="text"
-              value={authUser?.fullName || ""}
-              placeholder="Jhon Doe"
+              defaultValue={authUser?.fullName || ""}
+              placeholder="John Doe"
               {...register("fullName")}
-              className="bg-[#111111] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 text-white outline-none focus:border-[#22c55e] transition-all"
+              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+                errors.fullName ? "input-error" : ""
+              }`}
             />
             {errors.fullName && (
-              <span className="text-red-500 text-xs">
-                {errors.fullName.message}
-              </span>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.fullName.message}
+                </span>
+              </label>
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300 ml-1">
-              Bio
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Bio</span>
             </label>
             <textarea
               placeholder="Tell others about yourself and your language learning goals"
               rows={4}
               {...register("bio")}
-              className="bg-[#111111] border border-[#2a2a2a] rounded-3xl px-5 py-3.5 text-white outline-none focus:border-[#22c55e] transition-all resize-none"
+              className={`textarea textarea-bordered w-full rounded-3xl focus:textarea-primary transition-all resize-none ${
+                errors.bio ? "textarea-error" : ""
+              }`}
             />
             {errors.bio && (
-              <span className="text-red-500 text-xs">{errors.bio.message}</span>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.bio.message}
+                </span>
+              </label>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300 ml-1">
-                Native Language
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text font-medium">Native Language</span>
               </label>
               <select
                 {...register("nativeLang")}
-                className="bg-[#111111] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 text-gray-400 outline-none focus:border-[#22c55e] appearance-none cursor-pointer"
+                className={`select select-bordered w-full rounded-2xl focus:select-primary ${
+                  errors.nativeLang ? "select-error" : ""
+                }`}
               >
-                <option value="">Select your native language</option>
+                <option value="">Select language</option>
                 {languages.map((lang, index) => (
                   <option key={index} value={lang.name}>
                     {lang.name}
@@ -106,21 +115,27 @@ const OnBoarding = () => {
                 ))}
               </select>
               {errors.nativeLang && (
-                <span className="text-red-500 text-xs">
-                  {errors.nativeLang.message}
-                </span>
+                <label className="label">
+                  <span className="label-text-alt text-error">
+                    {errors.nativeLang.message}
+                  </span>
+                </label>
               )}
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300 ml-1">
-                Learning Language
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text font-medium">
+                  Learning Language
+                </span>
               </label>
               <select
                 {...register("learningLang")}
-                className="bg-[#111111] border border-[#2a2a2a] rounded-2xl px-5 py-3.5 text-gray-400 outline-none focus:border-[#22c55e] appearance-none cursor-pointer"
+                className={`select select-bordered w-full rounded-2xl focus:select-primary ${
+                  errors.learningLang ? "select-error" : ""
+                }`}
               >
-                <option value="">Select language you're learning</option>
+                <option value="">Select language</option>
                 {languages.map((lang, index) => (
                   <option key={index} value={lang.name}>
                     {lang.name}
@@ -128,46 +143,54 @@ const OnBoarding = () => {
                 ))}
               </select>
               {errors.learningLang && (
-                <span className="text-red-500 text-xs">
-                  {errors.learningLang.message}
-                </span>
+                <label className="label">
+                  <span className="label-text-alt text-error">
+                    {errors.learningLang.message}
+                  </span>
+                </label>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300 ml-1">
-              Location
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Location</span>
             </label>
             <div className="relative">
-              <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-50" />
               <input
                 type="text"
                 placeholder="City, Country"
                 {...register("location")}
-                className="w-full bg-[#111111] border border-[#2a2a2a] rounded-2xl pl-12 pr-5 py-3.5 text-white outline-none focus:border-[#22c55e] transition-all"
+                className={`input input-bordered w-full pl-12 rounded-2xl focus:input-primary transition-all ${
+                  errors.location ? "input-error" : ""
+                }`}
               />
-              {errors.location && (
-                <span className="text-red-500 text-xs">
+            </div>
+            {errors.location && (
+              <label className="label">
+                <span className="label-text-alt text-error">
                   {errors.location.message}
                 </span>
-              )}
-            </div>
+              </label>
+            )}
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-[#22c55e] hover:bg-[#1eb054] text-black font-bold py-4 rounded-full flex items-center justify-center gap-2 mt-4 transition-all shadow-lg shadow-[#22c55e]/10"
+            className="btn btn-primary btn-block rounded-full shadow-lg shadow-primary/20"
           >
-            <Globe className="w-5 h-5" />
             {isPending ? (
-              <div className="flex items-center justify-center gap-2">
-                <span className="loading loading-spinner loading-xs"></span>
-                <span>Onboarding...</span>
-              </div>
+              <>
+                <span className="loading loading-spinner"></span>
+                Onboarding...
+              </>
             ) : (
-              "Complete Onboarding"
+              <>
+                <Globe className="w-5 h-5" />
+                Complete Onboarding
+              </>
             )}
           </button>
         </form>

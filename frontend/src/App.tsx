@@ -10,22 +10,27 @@ import CallPage from "./pages/CallPage";
 import NotFound from "./pages/NotFound";
 import Loader from "./components/loader/Loader";
 import useAuthUser from "./hooks/useAuthUser";
+import Layout from "./components/layout/Layout";
+import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
+  const { theme } = useThemeStore();
 
   const isOnboarded = authUser?.isOnboarded;
 
   if (isLoading) return <Loader />;
 
   return (
-    <div>
+    <div data-theme={theme}>
       <Routes>
         <Route
           path="/"
           element={
             authUser && isOnboarded ? (
-              <Home />
+              <Layout showSidebar={true}>
+                <Home />
+              </Layout>
             ) : (
               <Navigate to={authUser ? "/onboarding" : "/login"} />
             )
@@ -54,7 +59,7 @@ const App = () => {
           element={!authUser ? <Register /> : <Navigate to="/" />}
         />
         <Route
-          path="/notification"
+          path="/notifications"
           element={authUser ? <Notification /> : <Navigate to="/login" />}
         />
         <Route
