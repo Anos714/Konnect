@@ -6,6 +6,9 @@ interface ThemeStore {
 }
 
 export const useThemeStore = create<ThemeStore>((set) => ({
-  theme: "retro",
-  setTheme: (theme) => set({ theme }),
+  theme: localStorage.getItem("theme") || "night",
+  setTheme: (theme) => {
+    localStorage.setItem("theme", theme);
+    set({ theme });
+  },
 }));
