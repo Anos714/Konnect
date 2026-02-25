@@ -43,17 +43,12 @@ const Sidebar = () => {
       <div className="mt-auto pt-6 border-t border-base-300">
         <div className="flex items-center gap-3 px-2">
           <div className="relative">
-            {/* <img
+            <img
               src={authUser?.avatar}
               alt="User"
               className="w-10 h-10 rounded-full bg-base-300"
-            /> */}
+            />
 
-            <div className="flex justify-center items-center w-10 h-10 rounded-full bg-base-300">
-              <p className="font-bold">
-                {authUser?.fullName.charAt(0).toUpperCase()}
-              </p>
-            </div>
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-success border-2 border-base-100 rounded-full"></div>
           </div>
           <div className="flex-1 min-w-0">

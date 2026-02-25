@@ -73,3 +73,116 @@ export type LogoutResponse = {
   success: boolean;
   msg: string;
 };
+
+export type FriendsResponse = {
+  success: boolean;
+  user: {
+    _id: string;
+    friends: Array<{
+      _id: string;
+      fullName: string;
+      email: string;
+      avatar: string;
+      bio: string;
+      nativeLang: string;
+      learningLang: string;
+      location: string;
+      isOnboarded: boolean;
+      friends: string[];
+      createdAt: string;
+      updatedAt: string;
+    }>;
+  };
+};
+
+export type RecommendedUsersResponse = {
+  success: boolean;
+  user: Array<{
+    _id: string;
+    fullName: string;
+    email: string;
+    avatar: string;
+    bio: string;
+    nativeLang: string;
+    learningLang: string;
+    location: string;
+  }>;
+};
+
+export type OutgoingRequestsResponse = {
+  success: boolean;
+  outgoingReqs: Array<{
+    _id: string;
+    sender: string;
+    receiver: {
+      _id: string;
+      fullName: string;
+      avatar: string;
+      nativeLang: string;
+      learningLang: string;
+    };
+    status: "pending" | "accepted";
+    createdAt: string;
+    updatedAt: string;
+  }>;
+};
+
+export type sendFriendReqsResponse = {
+  success: true;
+  request: {
+    sender: string;
+    receiver: string;
+    status: "pending" | "accepted";
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
+
+export type FriendType = {
+  _id: string;
+  fullName: string;
+  email: string;
+  avatar: string;
+  bio: string;
+  nativeLang: string;
+  learningLang: string;
+  location: string;
+};
+
+export type FriendReqNotificationType = {
+  success: boolean;
+  incomingReqs: Array<{
+    _id: string;
+    sender: string;
+    receiver: {
+      _id: string;
+      fullName: string;
+      avatar: string;
+      nativeLang: string;
+      learningLang: string;
+    };
+    status: "pending" | "accepted";
+    createdAt: string;
+    updatedAt: string;
+  }>;
+  acceptedReqs: Array<{
+    _id: string;
+    sender: string;
+    receiver: {
+      _id: string;
+      fullName: string;
+      avatar: string;
+      nativeLang: string;
+      learningLang: string;
+    };
+    status: "pending" | "accepted";
+    createdAt: string;
+    updatedAt: string;
+  }>;
+};
+
+export type AcceptFriendReqResponse = {
+  success: boolean;
+  msg: string;
+};

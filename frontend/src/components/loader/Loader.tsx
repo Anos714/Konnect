@@ -1,8 +1,13 @@
 import { Send } from "lucide-react";
+import { useThemeStore } from "../../store/useThemeStore";
 
 const Loader = () => {
+  const { theme } = useThemeStore();
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-base-100 text-base-content">
+    <div
+      className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-base-100 text-base-content"
+      data-theme={theme}
+    >
       <div className="relative">
         <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping"></div>
 

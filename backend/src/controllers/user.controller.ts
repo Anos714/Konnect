@@ -23,7 +23,7 @@ export const getRecommendedUsers = async (
 
     return res.status(200).json({
       success: true,
-      users: recommendedUser,
+      user: recommendedUser,
     });
   } catch (error) {
     next(error);

@@ -1,12 +1,18 @@
 import type {
+  AcceptFriendReqResponse,
   AuthUserResponse,
+  FriendReqNotificationType,
+  FriendsResponse,
   LoginRequest,
   LoginResponse,
   LogoutResponse,
   OnBoardRequest,
   OnBoardResponse,
+  OutgoingRequestsResponse,
+  RecommendedUsersResponse,
   RegisterResponse,
   RegsiterRequest,
+  sendFriendReqsResponse,
 } from "../types";
 import { api } from "./axios";
 
@@ -45,4 +51,40 @@ export const getAuthUser = async (): Promise<AuthUserResponse> => {
       }
     );
   }
+};
+
+export const getUserFriends = async (): Promise<FriendsResponse> => {
+  const res = await api.get("/users/friends/");
+  return res.data;
+};
+
+export const getRecommendedUsers =
+  async (): Promise<RecommendedUsersResponse> => {
+    const res = await api.get("/users/");
+    return res.data;
+  };
+
+export const getOutgoingFriendReqs =
+  async (): Promise<OutgoingRequestsResponse> => {
+    const res = await api.get("/users/outgoing-friend-request");
+    return res.data;
+  };
+
+export const sendFriendReqs = async (
+  userId: string,
+): Promise<sendFriendReqsResponse> => {
+  const res = await api.post(`/users/friend-request/${userId}`);
+  return res.data;
+};
+
+export const getFriendReqs = async (): Promise<FriendReqNotificationType> => {
+  const res = await api.get("/users/friend-request");
+  return res.data;
+};
+
+export const acceptFriendReq = async (
+  userId: string,
+): Promise<AcceptFriendReqResponse> => {
+  const res = await api.post(`/users/friend-request/${userId}/accept`);
+  return res.data;
 };

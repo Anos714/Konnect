@@ -29,18 +29,20 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-4">
-        <button className="btn btn-ghost btn-circle text-base-content">
+        <Link
+          to="/notifications"
+          className="btn btn-ghost btn-circle text-base-content"
+        >
           <div className="indicator">
             <Bell size={20} />
           </div>
-        </button>
+        </Link>
 
         <ThemeSelector />
 
         <div className="avatar">
           <div className="w-10 rounded-full border border-blue-400 flex justify-center items-center">
             <img src={authUser?.avatar} alt="User" />
-            {/* <p>{authUser?.fullName.charAt(0).toUpperCase()}</p> */}
           </div>
         </div>
 
