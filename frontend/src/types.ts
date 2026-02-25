@@ -154,17 +154,18 @@ export type FriendReqNotificationType = {
   success: boolean;
   incomingReqs: Array<{
     _id: string;
-    sender: string;
-    receiver: {
+    sender: {
       _id: string;
       fullName: string;
       avatar: string;
       nativeLang: string;
       learningLang: string;
     };
-    status: "pending" | "accepted";
+    receiver: string;
+    status: "pending"|"accepted";
     createdAt: string;
     updatedAt: string;
+    
   }>;
   acceptedReqs: Array<{
     _id: string;

@@ -85,6 +85,13 @@ export const getFriendReqs = async (): Promise<FriendReqNotificationType> => {
 export const acceptFriendReq = async (
   userId: string,
 ): Promise<AcceptFriendReqResponse> => {
-  const res = await api.post(`/users/friend-request/${userId}/accept`);
+  const res = await api.put(`/users/friend-request/${userId}/accept`);
+  return res.data;
+};
+
+export const rejectFriendReq = async (
+  userId: string,
+): Promise<AcceptFriendReqResponse> => {
+  const res = await api.post(`/users/friend-request/${userId}/reject`);
   return res.data;
 };
