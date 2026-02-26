@@ -3,12 +3,13 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "module": "commonjs",
-    "target": "es2020",
-    "lib": ["es2020"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022",
 
+    "lib": ["es2022"],
     "types": ["node"],
-    
+
     "sourceMap": true,
 
     "strict": true,
