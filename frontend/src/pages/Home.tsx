@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -24,7 +24,7 @@ const Home = () => {
       queryFn: getRecommendedUsers,
     });
 
-  const { data: outgoingFriendReqs, isLoading: outgoingFriendReqsLoading } =
+  const { data: outgoingFriendReqs} =
     useQuery({
       queryKey: ["outgoingFriendReqs"],
       queryFn: getOutgoingFriendReqs,
