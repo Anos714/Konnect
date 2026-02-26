@@ -5,13 +5,14 @@ import OnBoarding from "./pages/OnBoarding";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Notification from "./pages/Notification";
-import Chat from "./pages/Chat";
 import CallPage from "./pages/CallPage";
 import NotFound from "./pages/NotFound";
 import Loader from "./components/loader/Loader";
 import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/layout/Layout";
 import { useThemeStore } from "./store/useThemeStore";
+import ChatPage from "./pages/ChatPage";
+import Friends from "./pages/Friends";
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
@@ -70,13 +71,39 @@ const App = () => {
             )
           }
         />
-        <Route
-          path="/chat"
-          element={authUser ? <Chat /> : <Navigate to="/login" />}
+          <Route
+          path="/friends"
+          element={
+            authUser && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <Friends />
+              </Layout>
+            ) : (
+              <Navigate to={authUser ? "/onboarding" : "/login"} />
+            )
+          }
         />
         <Route
-          path="/call"
-          element={authUser ? <CallPage /> : <Navigate to="/login" />}
+          path="/chat/:id"
+          element={
+            authUser && isOnboarded ? (
+              <Layout showSidebar={false}>
+                <ChatPage />
+              </Layout>
+            ) : (
+              <Navigate to={authUser ? "/onboarding" : "/login"} />
+            )
+          }
+        />
+        <Route
+          path="/call/:id"
+          element={
+            authUser && isOnboarded ? (
+              <CallPage />
+            ) : (
+              <Navigate to={authUser ? "/onboarding" : "/login"} />
+            )
+          }
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

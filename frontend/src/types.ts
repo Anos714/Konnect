@@ -187,3 +187,8 @@ export type AcceptFriendReqResponse = {
   success: boolean;
   msg: string;
 };
+
+export type ChatResponse={
+  success:boolean;
+  token:string;
+}

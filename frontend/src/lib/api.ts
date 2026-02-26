@@ -1,6 +1,7 @@
 import type {
   AcceptFriendReqResponse,
   AuthUserResponse,
+  ChatResponse,
   FriendReqNotificationType,
   FriendsResponse,
   LoginRequest,
@@ -95,3 +96,8 @@ export const rejectFriendReq = async (
   const res = await api.post(`/users/friend-request/${userId}/reject`);
   return res.data;
 };
+
+export const getStreamToken=async():Promise<ChatResponse>=>{
+  const res=await api.get("/chat/token");
+  return res.data;
+}
