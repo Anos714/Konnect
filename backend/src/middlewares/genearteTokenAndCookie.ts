@@ -32,7 +32,7 @@ export const genrateTokenAndCookies = (
 
   const cookieOptions = {
     httpOnly: true,
-    sameSite: "lax" as "lax",
+    sameSite: "none" as "none",
     secure: process.env.NODE_ENV === "production",
   };
 
