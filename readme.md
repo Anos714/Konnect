@@ -6,6 +6,21 @@ Instead of traditional courses, Konnect focuses on **human interaction** — use
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="1.png" width="30%" />
+  <img src="2.png" width="30%" />
+  <img src="3.png" width="30%" />
+  <img src="4.png" width="30%" />
+  <img src="5.png" width="30%" />
+  <img src="6.png" width="30%" />
+  <img src="7.png" width="30%" />
+  <img src="8.png" width="30%" />
+</p>
+
+---
+
 ## 🚀 Features
 
 - 🌐 **Language Matching System**
@@ -88,11 +103,11 @@ Instead of traditional courses, Konnect focuses on **human interaction** — use
 
 ## ⚡ Key Challenges Solved
 
-- Real-time communication (chat + video)  
-- Matching users based on language preferences  
-- Secure authentication flow  
-- Managing global and server state efficiently  
-- Handling asynchronous UI with React Query  
+- Real-time communication (chat + video)
+- Matching users based on language preferences
+- Secure authentication flow
+- Managing global and server state efficiently
+- Handling asynchronous UI with React Query
 
 ---
 
@@ -153,6 +168,7 @@ cd konnect
 cd backend
 npm install
 ```
+
 #### Create a .env file in the backend directory:
 
 ```bash
