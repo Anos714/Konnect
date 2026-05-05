@@ -98,7 +98,7 @@ export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
   try {
     const cookieOptions = {
       httpOnly: true,
-      sameSite: "lax" as "lax",
+      sameSite: "none" as const,
       secure: process.env.NODE_ENV === "production",
     };
     res.clearCookie("accessToken", {
@@ -215,7 +215,7 @@ export const refreshAccessToken: RequestHandler = async (req, res, next) => {
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      sameSite: "lax" as "lax",
+      sameSite: "none" as const,
       secure: process.env.NODE_ENV === "production",
       maxAge: 15 * 60 * 1000,
     });
