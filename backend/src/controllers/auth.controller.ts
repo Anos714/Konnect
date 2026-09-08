@@ -15,6 +15,7 @@ import { genrateTokenAndCookies } from "../middlewares/genearteTokenAndCookie.js
 import { AppError } from "../utils/AppError.js";
 import { upsertStreamUser } from "../config/stream.js";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+import { authCookieOptions } from "../config/cookies.js";
 
 export const regsiterUser = async (
   req: Request<{}, {}, registerRequest>,
@@ -96,19 +97,12 @@ export const loginUser = async (
 
 export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sameSite: "none" | "lax" =
-      process.env.NODE_ENV === "production" ? "none" : "lax";
-    const cookieOptions = {
-      httpOnly: true,
-      sameSite,
-      secure: process.env.NODE_ENV === "production",
-    };
     res.clearCookie("accessToken", {
-      ...cookieOptions,
+      ...authCookieOptions,
     });
 
     res.clearCookie("refreshToken", {
-      ...cookieOptions,
+      ...authCookieOptions,
     });
 
     return res.status(200).json({
@@ -213,12 +207,8 @@ export const refreshAccessToken: RequestHandler = async (req, res, next) => {
       },
     );
 
-    const sameSite: "none" | "lax" =
-      process.env.NODE_ENV === "production" ? "none" : "lax";
     res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      sameSite,
-      secure: process.env.NODE_ENV === "production",
+      ...authCookieOptions,
       maxAge: 15 * 60 * 1000,
     });
 

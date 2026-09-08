@@ -187,6 +187,10 @@ JWT_SECRET_REFRESH=your_jwt_refresh_token_secret
 # node env
 NODE_ENV=development
 HOST_URL=http://localhost:5173
+# For deployed frontend URLs, use comma-separated origins:
+# HOST_URLS=https://your-app.vercel.app,https://your-custom-domain.com
+# Set COOKIE_SECURE=false only for local HTTP development.
+COOKIE_SECURE=false
 ```
 
 #### Start the backend server:

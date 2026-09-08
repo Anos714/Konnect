@@ -11,6 +11,10 @@ import chatRouter from "./routes/chat.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+const allowedOrigins = (process.env.HOST_URLS || process.env.HOST_URL || "")
+  .split(",")
+  .map((origin) => origin.trim().replace(/\/$/, ""))
+  .filter(Boolean);
 
 //middlewares
 app.use(express.json());
@@ -18,7 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [process.env.HOST_URL!],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+        return callback(null, true);
+      }
+      return callback(new Error("Origin is not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   }),

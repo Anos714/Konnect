@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import jwt from "jsonwebtoken";
 import type { IUser } from "../types/user.js";
+import { authCookieOptions } from "../config/cookies.js";
 
 export const genrateTokenAndCookies = (
   statusCode: number,
@@ -8,8 +9,6 @@ export const genrateTokenAndCookies = (
   msg: string,
   user: IUser,
 ) => {
-  const sameSite: "none" | "lax" =
-    process.env.NODE_ENV === "production" ? "none" : "lax";
   const accessToken = jwt.sign(
     {
       _id: user._id,
@@ -32,19 +31,13 @@ export const genrateTokenAndCookies = (
     },
   );
 
-  const cookieOptions = {
-    httpOnly: true,
-    sameSite,
-    secure: process.env.NODE_ENV === "production",
-  };
-
   res.cookie("accessToken", accessToken, {
-    ...cookieOptions,
+    ...authCookieOptions,
     maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("refreshToken", refreshToken, {
-    ...cookieOptions,
+    ...authCookieOptions,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
