@@ -59,7 +59,11 @@ export const sendFriendRequest = async (
       throw new AppError("User is not authenticated", 401);
     }
     const userId = req.user._id;
-    const receiverId = new Types.ObjectId(req.params.id as string);
+    const receiverIdParam = req.params.id as string;
+    if (!Types.ObjectId.isValid(receiverIdParam)) {
+      throw new AppError("Invalid receiver id", 400);
+    }
+    const receiverId = new Types.ObjectId(receiverIdParam);
     if (userId.toString() === receiverId.toString()) {
       throw new AppError("You cannot send a friend request to yourself", 400);
     }
@@ -106,6 +110,9 @@ export const acceptFriendRequest = async (
 ) => {
   try {
     const { id: requestId } = req.params;
+    if (!Types.ObjectId.isValid(requestId as string)) {
+      throw new AppError("Invalid friend request id", 400);
+    }
     const friendRequest = await FriendRequestModel.findById(requestId);
     if (!friendRequest) {
       throw new AppError("Friend request not found", 404);
@@ -179,6 +186,9 @@ export const rejectFriendRequest = async (
 ) => {
   try {
     const { id: requestId } = req.params;
+    if (!Types.ObjectId.isValid(requestId as string)) {
+      throw new AppError("Invalid friend request id", 400);
+    }
     const friendRequest = await FriendRequestModel.findById(requestId);
     if (!friendRequest) {
       throw new AppError("Friend request not found", 404);

@@ -1,21 +1,21 @@
 import { MessageSquare } from "lucide-react";
 import type { FriendType } from "../../types";
 import { Link } from "react-router";
+import UserAvatar from "../ui/UserAvatar";
 
 const FriendCard = ({ friend }: { friend: FriendType }) => {
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-content/5">
-      <div className="card-body p-6">
+    <div className="app-card card h-full transition hover:-translate-y-1 hover:border-primary/30">
+      <div className="card-body p-5">
         <div className="flex items-center gap-4 mb-4">
-          <div className="avatar">
-            <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-              <img src={friend.avatar} alt="avatar" />
-            </div>
-          </div>
-          <h3 className="font-bold text-lg">{friend.fullName}</h3>
+          <UserAvatar
+            name={friend.fullName}
+            ring="ring ring-primary ring-offset-base-100 ring-offset-2"
+          />
+          <div><h3 className="font-semibold">{friend.fullName}</h3><p className="mt-1 text-xs text-base-content/50">Language partner</p></div>
         </div>
         <div className="flex flex-wrap gap-2 mb-6">
-          <div className="badge badge-primary gap-1 py-3 px-4 font-medium">
+          <div className="badge badge-primary gap-1 border-0 py-3 px-3 font-medium">
             Native: {friend.nativeLang}
           </div>
           <div className="badge badge-outline gap-1 py-3 px-4 font-medium">
@@ -24,7 +24,7 @@ const FriendCard = ({ friend }: { friend: FriendType }) => {
         </div>
         <Link
           to={`/chat/${friend._id}`}
-          className="btn btn-outline btn-block rounded-2xl hover:btn-primary"
+          className="btn btn-outline btn-block"
         >
           <MessageSquare className="w-4 h-4 mr-2" />
           Message

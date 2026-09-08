@@ -1,8 +1,9 @@
-import { Bell, LogOut, Send } from "lucide-react";
+import { Bell, LogOut, MessageCircle } from "lucide-react";
 import { useLocation, Link } from "react-router";
 import { useLogout } from "../../hooks/useLogout";
 import ThemeSelector from "./ThemeSelector";
 import useAuthUser from "../../hooks/useAuthUser";
+import UserAvatar from "../ui/UserAvatar";
 
 const Navbar = () => {
   const { LogoutMutation } = useLogout();
@@ -16,16 +17,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-base-100 px-0">
+    <div className="navbar min-h-16 bg-transparent px-0">
       <div className="flex-1">
-        {isChatPage && (
+        {isChatPage ? (
           <Link to="/" className="flex items-center gap-2 px-2">
-            <Send className="text-primary" size={24} />
-            <h1 className="text-xl font-bold text-primary tracking-tight">
-              Konnect
-            </h1>
+            <MessageCircle className="text-primary" size={21} />
+            <h1 className="text-lg font-semibold tracking-tight">Konnect</h1>
           </Link>
-        )}
+        ) : <p className="px-2 text-sm font-medium text-base-content/50">Make a meaningful connection today.</p>}
       </div>
 
       <div className="flex gap-4">
@@ -40,11 +39,7 @@ const Navbar = () => {
 
         <ThemeSelector />
 
-        <div className="avatar">
-          <div className="w-10 rounded-full border border-blue-400 flex justify-center items-center">
-            <img src={authUser?.avatar} alt="User" />
-          </div>
-        </div>
+        <UserAvatar name={authUser?.fullName} className="h-10 w-10 text-sm" ring="border border-primary/40" />
 
         <button
           className="btn btn-ghost btn-circle text-base-content"

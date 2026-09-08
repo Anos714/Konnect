@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { UserPlus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   getOutgoingFriendReqs,
   getRecommendedUsers,
@@ -11,8 +11,6 @@ import FriendCard from "../components/friends/FriendCard";
 import RecommendUserCard from "../components/friends/RecommendUserCard";
 
 const Home = () => {
-  const [outgoingReqIds, setOutgoingIds] = useState(new Set());
-
   const { data: friends, isLoading: friendsLoading } = useQuery({
     queryKey: ["friends"],
     queryFn: getUserFriends,
@@ -30,22 +28,22 @@ const Home = () => {
       queryFn: getOutgoingFriendReqs,
     });
 
-  useEffect(() => {
-    const outgoingIds = new Set();
-    if (outgoingFriendReqs && outgoingFriendReqs.outgoingReqs.length > 0) {
-      outgoingFriendReqs.outgoingReqs.forEach((req) => {
-        outgoingIds.add(req.receiver._id);
-      });
-      setOutgoingIds(outgoingIds);
-    }
-  }, [outgoingFriendReqs]);
+  const outgoingReqIds = new Set(
+    outgoingFriendReqs?.outgoingReqs.map((req) => req.receiver._id) ?? [],
+  );
+  const [optimisticOutgoingIds, setOptimisticOutgoingIds] =
+    useState<Set<string>>(new Set());
+  const requestIds = new Set([...outgoingReqIds, ...optimisticOutgoingIds]);
 
   return (
-    <div className="p-6 lg:p-10 bg-base-300 min-h-screen">
+    <div className="space-y-12 py-4 lg:py-8">
       {/* Your Friends Section */}
       <section className="mb-12">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Your Friends</h2>
+          <div>
+            <p className="section-label mb-2">Your circle</p>
+            <h2 className="page-heading text-3xl font-semibold">Your Friends</h2>
+          </div>
           <Link
             to="/notifications"
             className="btn btn-outline btn-sm rounded-xl gap-2"
@@ -73,8 +71,8 @@ const Home = () => {
       {/* Meet New Learners Section */}
       <section>
         <div className="mb-8">
-          <h2 className="text-2xl font-bold">Meet New Learners</h2>
-          <p className="text-base-content/60">
+          <h2 className="page-heading text-3xl font-semibold">Meet New Learners</h2>
+          <p className="mt-2 text-base-content/60">
             Discover perfect language exchange partners based on your profile
           </p>
         </div>
@@ -88,13 +86,21 @@ const Home = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recommendedUsers?.user?.map((user) => {
-              const hasRequestSent = outgoingReqIds.has(user._id);
+              const hasRequestSent = requestIds.has(user._id);
 
               return (
                 <RecommendUserCard
                   key={user._id}
                   user={user}
                   hasRequestSent={hasRequestSent}
+                  onRequestStateChange={(sent) => {
+                    setOptimisticOutgoingIds((current) => {
+                      const next = new Set(current);
+                      if (sent) next.add(user._id);
+                      else next.delete(user._id);
+                      return next;
+                    });
+                  }}
                 />
               );
             })}

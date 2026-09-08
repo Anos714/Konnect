@@ -13,6 +13,7 @@ import Layout from "./components/layout/Layout";
 import { useThemeStore } from "./store/useThemeStore";
 import ChatPage from "./pages/ChatPage";
 import Friends from "./pages/Friends";
+import Landing from "./pages/Landing";
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
@@ -33,7 +34,7 @@ const App = () => {
                 <Home />
               </Layout>
             ) : (
-              <Navigate to={authUser ? "/onboarding" : "/login"} />
+              authUser ? <Navigate to="/onboarding" /> : <Landing />
             )
           }
         />

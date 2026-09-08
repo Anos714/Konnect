@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Send } from "lucide-react";
+import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 import { type LoginFormData, loginSchema } from "../validation/authSchema";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router";
@@ -25,23 +25,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-base-300 text-base-content font-sans">
-      <div className="w-full md:w-[45%] flex flex-col justify-center px-8 py-12 lg:px-20 bg-base-100 shadow-xl">
-        <div className="mb-8 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-2 mb-8">
-            <Send className="text-primary w-8 h-8" />
-            <span className="text-2xl font-bold tracking-tight text-primary">
-              Konnect
-            </span>
+    <div className="auth-page flex min-h-screen w-full items-center justify-center p-4 text-base-content md:p-8">
+      <div className="auth-panel grid w-full max-w-5xl overflow-hidden rounded-[28px] md:grid-cols-[.9fr_1.1fr]">
+      <div className="flex flex-col justify-center px-7 py-10 sm:px-12 lg:px-16">
+        <div className="mb-9">
+          <div className="mb-10 flex items-center gap-3">
+            <span className="brand-mark"><MessageCircle size={18} /></span>
+            <span className="text-lg font-semibold tracking-tight text-white">Konnect</span>
           </div>
 
-          <h1 className="text-2xl font-bold mb-1">Welcome Back</h1>
-          <p className="text-base-content/60 text-sm">
+          <p className="auth-kicker mb-3">Welcome back</p>
+          <h1 className="page-heading text-4xl font-semibold text-white">Pick up where you left off.</h1>
+          <p className="mt-3 text-sm leading-6 text-slate-400">
             Log in to continue your language journey
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(hanldeLoginForm)} className="space-y-6">
+        <form onSubmit={handleSubmit(hanldeLoginForm)} className="space-y-5">
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-medium">Email Address</span>
@@ -50,7 +50,7 @@ const Login = () => {
               type="email"
               placeholder="hello@example.com"
               {...register("email")}
-              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+              className={`input input-bordered w-full transition-all ${
                 errors.email ? "input-error" : ""
               }`}
             />
@@ -74,7 +74,7 @@ const Login = () => {
               type="password"
               placeholder="••••••••"
               {...register("password")}
-              className={`input input-bordered w-full rounded-2xl focus:input-primary transition-all ${
+              className={`input input-bordered w-full transition-all ${
                 errors.password ? "input-error" : ""
               }`}
             />
@@ -90,7 +90,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="btn btn-primary btn-block rounded-full mt-2"
+            className="btn btn-primary btn-block mt-2"
           >
             {isPending ? (
               <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ const Login = () => {
                 <span>Signing In...</span>
               </div>
             ) : (
-              "Sign In"
+              <>Sign in <ArrowRight size={16} /></>
             )}
           </button>
 
@@ -113,25 +113,17 @@ const Login = () => {
           </p>
         </form>
       </div>
-
-      <div className="hidden md:flex w-[55%] bg-base-200 flex-col items-center justify-center p-12 text-center border-l border-base-content/5">
-        <div className="relative w-full max-w-sm mb-12">
-          <img
-            src="register.png"
-            alt="Welcome back"
-            className="w-full h-auto opacity-90 drop-shadow-2xl brightness-90"
-          />
+      <div className="auth-art relative hidden min-h-[620px] flex-col justify-end overflow-hidden p-12 md:flex">
+        <div className="auth-orbit absolute right-12 top-16 w-64 rounded-3xl p-5">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-300"><span className="h-2 w-2 rounded-full bg-emerald-300" /> Your people are online</div>
+          <div className="mt-5 flex items-center gap-3"><span className="brand-mark h-10 w-10 text-sm">K</span><div><p className="text-sm font-medium text-white">Keep the conversation going.</p><p className="mt-1 text-xs text-slate-400">Small talk, big progress.</p></div></div>
         </div>
-
-        <div className="max-w-sm space-y-4">
-          <h2 className="text-2xl font-bold leading-tight">
-            Ready to jump back in?
-          </h2>
-          <p className="text-base-content/60">
-            Your partners are waiting. Pick up right where you left off and keep
-            the conversation going.
-          </p>
+        <div className="relative z-10 max-w-sm">
+          <Sparkles className="mb-5 text-cyan-200" size={22} />
+          <h2 className="page-heading text-4xl font-semibold leading-tight text-white">The world is closer than you think.</h2>
+          <p className="mt-4 leading-7 text-slate-300">Meet people who make learning feel less like studying and more like belonging.</p>
         </div>
+      </div>
       </div>
     </div>
   );

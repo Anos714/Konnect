@@ -9,6 +9,7 @@ import type { OnBoardRequest } from "../types";
 import { languages } from "../assets/assets";
 import useAuthUser from "../hooks/useAuthUser";
 import { useOnBoard } from "../hooks/useOnBoard";
+import UserAvatar from "../components/ui/UserAvatar";
 
 const OnBoarding = () => {
   const {
@@ -31,22 +32,21 @@ const OnBoarding = () => {
   const { authUser } = useAuthUser();
 
   return (
-    <div className="min-h-screen bg-base-300 flex items-center justify-center p-4 sm:p-8 font-sans text-base-content">
-      <div className="w-full max-w-2xl bg-base-100 rounded-[40px] p-8 md:p-12 border border-base-content/5 shadow-2xl">
+    <div className="auth-page flex min-h-screen items-center justify-center p-4 font-sans text-base-content sm:p-8">
+      <div className="auth-panel w-full max-w-2xl rounded-[28px] p-7 sm:p-10 md:p-12">
         <div className="flex flex-col items-center mb-10">
-          <h1 className="text-3xl font-bold mb-8">Complete Your Profile</h1>
+          <p className="auth-kicker mb-2">One last step</p>
+          <h1 className="page-heading mb-8 text-3xl font-semibold text-white">Make your profile feel like you.</h1>
 
           <div className="relative mb-6">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-base-200 bg-base-200 shadow-inner">
-              <img
-                src={authUser?.avatar}
-                alt="Avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <UserAvatar
+              name={authUser?.fullName}
+              className="h-32 w-32 text-5xl"
+              ring="border-4 border-base-200 shadow-inner"
+            />
           </div>
 
-          <button className="btn btn-secondary btn-sm rounded-full gap-2">
+          <button className="btn btn-outline btn-sm gap-2">
             <Dices className="w-4 h-4" />
             Generate Random Avatar
           </button>

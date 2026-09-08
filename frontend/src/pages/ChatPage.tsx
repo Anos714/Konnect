@@ -22,11 +22,11 @@ const [channel, setChannel] = useState<StreamChannel | null>(null)
 
   const{authUser}=useAuthUser()
   if(!authUser){
-    return <div>Please log in to access the chat.</div>
+    return <div className="flex h-full items-center justify-center text-sm text-base-content/60">Please log in to access the chat.</div>
   }
 
   if(!id){
-    return <div>No user specified for chat.</div>
+    return <div className="flex h-full items-center justify-center text-sm text-base-content/60">No user specified for chat.</div>
   }
 
   const{data:streamTokenData}=useQuery({
@@ -81,7 +81,7 @@ if(channel){
   }
 
   if(loading||!chatClient||!channel) return <ChatLoader/>
-  return <div className="h-[93vh]">
+  return <div className="h-[calc(100vh-72px)] overflow-hidden rounded-2xl border border-base-content/10 bg-base-100/60 shadow-xl">
     <Chat client={chatClient}>
       <Channel channel={channel}>
         <div className="w-full relative">

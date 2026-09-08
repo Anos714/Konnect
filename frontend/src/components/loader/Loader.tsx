@@ -11,14 +11,14 @@ const Loader = () => {
       <div className="relative">
         <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping"></div>
 
-        <div className="relative bg-base-300 p-4 rounded-full border border-primary/20">
-          <Send className="w-10 h-10 text-primary animate-pulse" />
+        <div className="relative bg-base-200/70 p-4 rounded-2xl border border-primary/20">
+          <Send className="w-8 h-8 text-primary animate-pulse" />
         </div>
       </div>
 
       <div className="flex items-center gap-1.5">
         <span className="text-xs font-medium uppercase tracking-[0.2em] opacity-50">
-          Connecting
+          Loading your space
         </span>
         <span className="flex gap-1">
           <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></span>

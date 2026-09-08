@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { acceptFriendReq, getFriendReqs, rejectFriendReq } from "../lib/api";
 import { UserPlus, Bell, Check, X, UserCheck, Clock } from "lucide-react";
+import UserAvatar from "../components/ui/UserAvatar";
 
 const Notification = () => {
   const queryClient = useQueryClient();
@@ -30,11 +31,12 @@ const Notification = () => {
   const incomingRequests = friendRequests?.incomingReqs || [];
   const acceptedRequests = friendRequests?.acceptedReqs || [];
 
-  console.log(incomingRequests, acceptedRequests);
-
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-10">
-      <h1 className="text-3xl font-bold mb-8">Notifications</h1>
+    <div className="mx-auto max-w-5xl space-y-10 py-4 lg:py-8">
+      <div>
+        <p className="section-label mb-2">Stay in the loop</p>
+        <h1 className="page-heading text-3xl font-semibold">Notifications</h1>
+      </div>
 
       {/* Friend Requests Section */}
      
@@ -58,15 +60,14 @@ const Notification = () => {
             incomingRequests.map((req) => (
               <div
                 key={req._id}
-                className="card bg-base-200/50 border border-base-content/10 shadow-sm"
+                className="app-card card border-base-content/10 shadow-none"
               >
                 <div className="card-body p-4 md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                   <div className="flex items-center gap-4">
-                    <div className="avatar">
-                      <div className="w-12 h-12 rounded-full ring ring-primary/20 ring-offset-base-100 ring-offset-2">
-                        <img src={req.sender.avatar} alt="avatar" />
-                      </div>
-                    </div>
+                    <UserAvatar
+                      name={req.sender.fullName}
+                      ring="ring ring-primary/20 ring-offset-base-100 ring-offset-2"
+                    />
                     <div>
                       <h3 className="font-bold text-lg">
                         {req.sender.fullName}
@@ -127,15 +128,11 @@ const Notification = () => {
             acceptedRequests.map((req) => (
               <div
                 key={req._id}
-                className="card bg-base-200/30 border border-base-content/5"
+                className="app-card card border-base-content/5 shadow-none"
               >
                 <div className="card-body p-4 flex-row items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="avatar online placeholder">
-                      <div className="w-10 h-10 rounded-full bg-neutral text-neutral-content">
-                        <img src={req.receiver.avatar} alt="avatar" />
-                      </div>
-                    </div>
+                    <UserAvatar name={req.receiver.fullName} className="h-10 w-10 text-sm" />
                     <div>
                       <h3 className="font-medium text-sm md:text-base">
                         {req.receiver.fullName}

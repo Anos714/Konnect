@@ -1,10 +1,14 @@
 import type { RequestHandler } from "express";
 import { generateStreamToken } from "../config/stream.js";
 import type { Types } from "mongoose";
+import { AppError } from "../utils/AppError.js";
 
 export const getStreamToken: RequestHandler = async (req, res, next) => {
   try {
-    const token = generateStreamToken(req.user?._id as Types.ObjectId);
+    if (!req.user?._id) {
+      throw new AppError("User is not authenticated", 401);
+    }
+    const token = generateStreamToken(req.user._id as Types.ObjectId);
     return res.status(200).json({
       success: true,
       token,

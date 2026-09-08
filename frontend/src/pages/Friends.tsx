@@ -9,7 +9,13 @@ const Friends = () => {
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="space-y-8 py-4 lg:py-8">
+      <div>
+        <p className="section-label mb-2">Your circle</p>
+        <h1 className="page-heading text-3xl font-semibold">Friends</h1>
+        <p className="mt-2 text-base-content/60">Keep the conversations going.</p>
+      </div>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {friendsLoading ? (
             <div className="flex justify-center py-12">
               <span className="loading loading-spinner loading-lg"></span>
@@ -21,7 +27,8 @@ const Friends = () => {
               <FriendCard key={friend._id} friend={friend} />
             ))
           )}
-        </div>
+      </div>
+    </div>
   )
 }
 export default Friends

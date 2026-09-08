@@ -25,11 +25,11 @@ const [call, setCall] = useState<Call | null>(null)
 
   const{authUser,isLoading}=useAuthUser()
   if(!authUser){
-    return <div>Please log in to access the chat.</div>
+    return <div className="flex h-screen items-center justify-center text-sm text-base-content/60">Please log in to access the call.</div>
   }
 
   if(!callId){
-    return <div>No call specified.</div>
+    return <div className="flex h-screen items-center justify-center text-sm text-base-content/60">No call specified.</div>
   }
 
   const{data:streamTokenData}=useQuery({
@@ -72,7 +72,7 @@ initCall()
 
   if(isLoading||isConnecting)return <Loader/>
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
+    <div className="app-main h-screen flex flex-col items-center justify-center p-4">
       <div className="relative">
         {client &&call?(
           <StreamVideo client={client}>
@@ -83,7 +83,7 @@ initCall()
             
         ):(
           <div className="flex items-center justify-center h-full">
-          <p>Could not initialize call. Please regresh or try again later</p>
+          <div className="app-card rounded-2xl px-6 py-5 text-sm text-base-content/70">Could not initialize call. Please refresh or try again later.</div>
           </div>
         )}
       </div>

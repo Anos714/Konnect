@@ -96,19 +96,19 @@ export const loginUser = async (
 
 export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
   try {
+    const sameSite: "none" | "lax" =
+      process.env.NODE_ENV === "production" ? "none" : "lax";
     const cookieOptions = {
       httpOnly: true,
-      sameSite: "none" as const,
+      sameSite,
       secure: process.env.NODE_ENV === "production",
     };
     res.clearCookie("accessToken", {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000,
     });
 
     res.clearCookie("refreshToken", {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -213,9 +213,11 @@ export const refreshAccessToken: RequestHandler = async (req, res, next) => {
       },
     );
 
+    const sameSite: "none" | "lax" =
+      process.env.NODE_ENV === "production" ? "none" : "lax";
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      sameSite: "none" as const,
+      sameSite,
       secure: process.env.NODE_ENV === "production",
       maxAge: 15 * 60 * 1000,
     });
