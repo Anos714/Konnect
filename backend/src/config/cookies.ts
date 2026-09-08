@@ -8,6 +8,6 @@ const isSecureEnvironment =
 export const authCookieOptions: CookieOptions = {
   httpOnly: true,
   sameSite: isSecureEnvironment ? "none" : "lax",
-  secure: isSecureEnvironment,
+  secure: isSecureEnvironment?true:false,
   path: "/",
 };
